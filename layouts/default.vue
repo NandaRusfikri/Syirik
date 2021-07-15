@@ -9,7 +9,7 @@
       <v-spacer></v-spacer>
 
       <v-btn outlined>
-        Beranda
+        About
       </v-btn>
     </v-app-bar>
     <!-- <v-app-bar
