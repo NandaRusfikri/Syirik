@@ -1,5 +1,6 @@
-# fpb
+# Syirik Persekutuan Angka
 
+## Membantu anda yang malas menyekutukan angka
 ## Build Setup
 
 ```bash
