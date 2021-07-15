@@ -39,7 +39,7 @@
         <br />
         <v-row align="center" justify="center">
           <template v-for="(item, index) in angka.length">
-            <v-col cols="12" md="2" sm="3" class="py-0" :key="index">
+            <v-col cols="3"  md="2" sm="4" class="py-0" :key="index">
               <v-text-field v-model="angka[index].value" outlined>
               </v-text-field
             ></v-col>
