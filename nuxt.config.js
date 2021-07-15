@@ -8,8 +8,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - fpb',
-    title: 'fpb',
+    titleTemplate: '%s - Persekutuan Angka',
+    title: 'Syirik',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
