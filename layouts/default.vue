@@ -1,14 +1,13 @@
 <template>
-
   <v-app app>
-     <v-app-bar app color="white" flat >
-      <v-toolbar-title  style="font-family: Comfortaa;font-weight: 800" >
+    <v-app-bar app color="white" flat>
+      <v-toolbar-title style="font-family: Comfortaa;font-weight: 800">
         <b>Syirik</b>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn outlined>
+      <v-btn @click="saweria()" outlined>
         About
       </v-btn>
     </v-app-bar>
@@ -23,7 +22,7 @@
         <b>Buahati</b>
       </v-toolbar-title>
     </v-app-bar> -->
-    <v-main  :style="{ background: $vuetify.theme.themes[theme].background }">
+    <v-main :style="{ background: $vuetify.theme.themes[theme].background }">
       <v-snackbar
         v-model="snackbar.enabled"
         :color="snackbar.color"
@@ -39,12 +38,16 @@
       </v-snackbar>
       <nuxt />
     </v-main>
-
   </v-app>
 </template>
 <script>
 import { mapGetters } from "vuex";
 export default {
+  methods: {
+    saweria() {
+      window.open("https://saweria.co/nandarusfikri", "_blank");
+    }
+  },
   computed: {
     theme() {
       return this.$vuetify.theme.dark ? "dark" : "light";

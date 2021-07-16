@@ -5,15 +5,15 @@
       class="mx-auto rounded-lg"
       :max-width="$vuetify.breakpoint.mobile ? 400 : 600"
     >
-      <v-card class="mx-auto rounded-lg">
-        <v-list-item two-line>
+      <v-card flat class="mx-auto rounded-lg">
+        <v-list-item three-line>
           <v-list-item-content>
             <v-list-item-title class="text-h5">
-              Halo Pemalas!
+              Halo Musyrikin!
             </v-list-item-title>
             <v-list-item-subtitle
-              >Kita bantu cari <b>Penyekutu</b> angka KPK &
-              FPB</v-list-item-subtitle
+              >Kita bantu <b>Menyekutukan</b> bilangan Anda atau mencari
+              <b> KPK & FPB</b></v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
@@ -39,30 +39,143 @@
         <br />
         <v-row align="center" justify="center">
           <template v-for="(item, index) in angka.length">
-            <v-col cols="3"  md="2" sm="4" class="py-0" :key="index">
-              <v-text-field   @keypress="isNumber($event)" v-model="angka[index].value" outlined>
+            <v-col cols="3" md="2" sm="4" class="py-0" :key="index">
+              <v-text-field
+                @keypress="isNumber($event)"
+                v-model="angka[index].value"
+                outlined
+              >
               </v-text-field
             ></v-col>
           </template>
         </v-row>
       </v-card>
 
-      <v-toolbar dense flat>
-        <v-toolbar-title>Hasil </v-toolbar-title>
-      </v-toolbar>
-      <div v-if="!loading">
-        <p class="text-h5">{{hasil}}</p>
+      <v-card-text>
+        <v-card v-if="!loading" outlined color="primary" class="rounded-lg">
+          <v-card>
+            <v-toolbar dense flat>
+              <v-toolbar-title>Penyederhanaan bilangan </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text class="pt-0">
+              bilangan
+              <span
+                :style="{ color: $vuetify.theme.themes.light.primary }"
+                v-for="(item, index) in angka.length"
+                :key="index"
+                ><b> {{ angka[index].value }} </b>
+              </span>
+              bisa di sederhanakan dengan dibagi
+              <span :style="{ color: $vuetify.theme.themes.light.error }"
+                ><b>{{ hasil[0] }}</b>
+              </span>
+              <b>Hasilnya :</b>
 
-      </div>
+              <span
+                v-for="(item, index) in angka.length"
+                :key="angka[index].value"
+              >
+                <div style="font-weight: bold;">
+                  <span
+                    :style="{ color: $vuetify.theme.themes.light.primary }"
+                    >{{ angka[index].value }}</span
+                  >/<span
+                    :style="{ color: $vuetify.theme.themes.light.error }"
+                    >{{ hasil[0] }}</span
+                  >
+                  =
+                  <span
+                    :style="{ color: $vuetify.theme.themes.light.secondary }"
+                    >{{ angka[index].value / hasil[0] }}</span
+                  >
+                </div>
+              </span>
+            </v-card-text>
+          </v-card>
+        </v-card>
+        <v-card
+          v-if="!loading"
+          outlined
+          color="primary"
+          class="mt-2 rounded-lg"
+        >
+          <v-card>
+            <v-toolbar dense flat>
+              <v-toolbar-title>Mencari FPB </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text class="pt-0">
+              Faktor Persekutuan Terbesar dari bilangan
+              <span
+                :style="{ color: $vuetify.theme.themes.light.primary }"
+                v-for="(item, index) in angka.length"
+                :key="index"
+                ><b> {{ angka[index].value }} </b>
+              </span>
+              <b>adalah </b>
+              <span :style="{ color: $vuetify.theme.themes.light.error }"
+                ><b>{{ hasil[0] }}</b>
+              </span>
+            </v-card-text>
+          </v-card>
+        </v-card>
+
+        <v-card
+          v-if="!loading"
+          outlined
+          color="primary"
+          class="mt-2 rounded-lg"
+        >
+          <v-card>
+            <v-toolbar dense flat>
+              <v-toolbar-title>Mencari KPK </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text class="pt-0">
+              Maaf Saat Ini <b>KPK</b>nya sedang di Nerf. jika sudah normal akan
+              di publish
+            </v-card-text>
+          </v-card>
+        </v-card>
+      </v-card-text>
 
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn text>
-          Full Report
+        <v-btn text @click="dialog = true">
+          Lihat Rumus
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-dialog max-width="400px" v-model="dialog">
+      <v-card class="rounded-lg">
+        <v-toolbar flat dense>
+          <v-toolbar-title dark><b>Lihat Rumus </b></v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+
+        <v-card-text>
+          <p>Beliin Saya <b>Kopi</b> atau <b>sawer</b>  di saweria Nanti Saya Kasih tau rumus cepetnya.</p>
+          <a href="https://saweria.co/nandarusfikri" target="_blank"
+            ><img
+              src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
+              alt="Buy Me A Coffee"
+              style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"
+          /></a>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn dense small outlined  @click="saweria()" color="primary">
+            Beliin
+          </v-btn>
+          <v-btn dense small @click="saweria()" color="#faae2b">
+            Sawer
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -70,14 +183,19 @@
 export default {
   data() {
     return {
+      dialog: false,
       hasil: null,
-      angka: [{ value: 20 }, { value: 40 }],
+      angka: [{ value: 75 }, { value: 105 }],
       time: 0,
       loading: true
     };
   },
+
   methods: {
-      isNumber: function(evt) {
+    saweria(){
+      window.open('https://saweria.co/nandarusfikri', '_blank')
+    },
+    isNumber: function(evt) {
       evt = evt ? evt : window.event;
       var charCode = evt.which ? evt.which : evt.keyCode;
       if (
@@ -98,38 +216,40 @@ export default {
     },
     hitung() {
       this.loading = true;
-      var max = this.angka.reduce(
+      const angka = this.angka;
+      this.penyederhanaan();
+      this.loading = false;
+    },
+    penyederhanaan() {
+      var temp = this.angka;
+      var max = temp.reduce(
         (max, p) => (p.value > max ? p.value : max),
-        this.angka[0].value
+        temp[0].value
       );
 
-      var hasil = [];
+      var pembagi = [];
 
       for (let i = 0; i < max; i++) {
         var ayam = true;
-        for (let y = 0; y < this.angka.length; y++) {
-          if (this.angka[y].value % i !== 0) {
+        for (let y = 0; y < temp.length; y++) {
+          if (temp[y].value % i !== 0) {
             ayam = false;
           }
         }
         if (ayam) {
-          hasil.push(i);
-
-          // console.log(i);
+          pembagi.push(i);
         }
         ayam = null;
       }
-      // console.log("hasil ", hasil);
 
-         hasil.sort(function(a, b){return b - a});
-          this.hasil = hasil;
-      this.loading = false;
-
+      pembagi.sort(function(a, b) {
+        return b - a;
+      });
+      console.log("pembagi ", pembagi);
+      this.hasil = pembagi;
     }
   },
-  computed: {
-
-  }
+  computed: {}
 };
 </script>
 <style scoped>

@@ -80,7 +80,7 @@ export default {
           background: "#74E39A20",
           primary: "#53CC9D",
           accent: "#E3E3E3",
-          secondary: colors.amber.darken3,
+          secondary: "#1A237E",
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
