@@ -116,6 +116,31 @@
                 ><b>{{ hasil[0] }}</b>
               </span>
             </v-card-text>
+            <v-row>
+              <v-col v-for="item in FPB" :key="item" cols="12" md="4" sm="6">
+                <v-timeline>
+                  <v-timeline-item
+                    left
+                    v-for="n in item"
+                    :key="n"
+                    fill-dot
+                    color="red lighten-2"
+                  >
+                    <template v-slot:icon>
+                      <v-avatar>
+                        <span class="white--text text-h5">{{ n.hasil }}</span>
+                      </v-avatar>
+                    </template>
+
+                    <v-card v-if="n.pembagi" color="primary" max-width="50">
+                      <v-avatar color="primary" size="36">
+                        <span class="white--text text-h5">{{ n.pembagi }}</span>
+                      </v-avatar>
+                    </v-card>
+                  </v-timeline-item>
+                </v-timeline>
+              </v-col>
+            </v-row>
           </v-card>
         </v-card>
 
@@ -157,7 +182,10 @@
         </v-toolbar>
 
         <v-card-text>
-          <p>Beliin Saya <b>Kopi</b> atau <b>sawer</b>  di saweria Nanti Saya Kasih tau rumus cepetnya.</p>
+          <p>
+            Beliin Saya <b>Kopi</b> atau <b>sawer</b> di saweria Nanti Saya
+            Kasih tau rumus cepetnya.
+          </p>
           <a href="https://saweria.co/nandarusfikri" target="_blank"
             ><img
               src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
@@ -167,7 +195,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn dense small outlined  @click="saweria()" color="primary">
+          <v-btn dense small outlined @click="saweria()" color="primary">
             Beliin
           </v-btn>
           <v-btn dense small @click="saweria()" color="#faae2b">
@@ -176,6 +204,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-container>
 </template>
 
@@ -185,15 +214,16 @@ export default {
     return {
       dialog: false,
       hasil: null,
-      angka: [{ value: 75 }, { value: 105 }],
+      angka: [{ value: 36 }, { value: 54 }],
       time: 0,
-      loading: true
+      loading: true,
+      FPB: []
     };
   },
 
   methods: {
-    saweria(){
-      window.open('https://saweria.co/nandarusfikri', '_blank')
+    saweria() {
+      window.open("https://saweria.co/nandarusfikri", "_blank");
     },
     isNumber: function(evt) {
       evt = evt ? evt : window.event;
@@ -217,11 +247,11 @@ export default {
     hitung() {
       this.loading = true;
       const angka = this.angka;
-      this.penyederhanaan();
+      this.penyederhanaan(angka);
       this.loading = false;
     },
-    penyederhanaan() {
-      var temp = this.angka;
+    penyederhanaan(params) {
+      var temp = params;
       var max = temp.reduce(
         (max, p) => (p.value > max ? p.value : max),
         temp[0].value
@@ -247,12 +277,53 @@ export default {
       });
       console.log("pembagi ", pembagi);
       this.hasil = pembagi;
+
+      var prima = [];
+
+      for (let x = 1; x <= max; x++) {
+        var pembagi = 0;
+        for (let z = 1; z <= x; z++) {
+          if (x % z == 0) {
+            pembagi++;
+          }
+        }
+        if (pembagi == 2) {
+          prima.push(x);
+        }
+      }
+
+      var result = [];
+
+      for (let s = 0; s < temp.length; s++) {
+        var bilangan,
+          sapi = [],
+          ayam;
+        bilangan = temp[s].value;
+        ayam = { pembagi: null, hasil: bilangan };
+        sapi.push(ayam);
+        for (let index = 0; index < max; index++) {
+          for (let h = 0; h < prima.length; h++) {
+            if (bilangan % prima[h] == 0) {
+              bilangan = bilangan / prima[h];
+
+              ayam = { pembagi: prima[h], hasil: bilangan };
+              sapi.push(ayam);
+              break;
+            }
+          }
+        }
+
+        result.push(sapi);
+      }
+
+      this.FPB = result;
     }
   },
   computed: {}
 };
 </script>
 <style scoped>
+
 #latar {
   background: rgb(0, 199, 166);
   background: radial-gradient(
