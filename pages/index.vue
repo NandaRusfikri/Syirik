@@ -3,27 +3,24 @@
     <v-card
       color="primary "
       outlined
+      flat
       class="mx-auto rounded-lg"
       :max-width="$vuetify.breakpoint.mobile ? 400 : 600"
     >
-      <v-card>
+      <v-card flat>
         <v-card flat class="mx-auto rounded-lg">
-          <v-list-item three-line>
-            <v-list-item-content>
-              <v-list-item-title class="text-h5">
-                Halo Musyrikin!
-              </v-list-item-title>
-              <v-list-item-subtitle
-                >Kita bantu <b>Menyekutukan</b> bilangan Anda atau mencari
-                <b> KPK & FPB</b></v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
+          <v-card-title class="text-h5"> Halo Musyrikin!</v-card-title>
+          <v-card-subtitle
+            >Kita bantu mencari <b> KPK & FPB</b> atau
+            <b>Menyekutukan </b>bilangan & Menyederhanakan masalah
+            Anda.</v-card-subtitle
+          >
 
           <v-card-actions>
-            <v-btn outlined small @click="add()">
+            <v-btn outlined small @click="add()"  :disabled="angka.length >= 4">
               <v-icon small>mdi-plus</v-icon>Angka</v-btn
             >
+            <v-spacer />
             <v-btn
               :disabled="angka.length <= 2"
               outlined
@@ -33,10 +30,7 @@
             >
               <v-icon small>mdi-delete</v-icon>Angka</v-btn
             >
-            <v-btn color="primary" @click="hitung()" small>
-              <v-icon small>mdi-run-fast</v-icon>Hitung</v-btn
-            ></v-card-actions
-          >
+          </v-card-actions>
 
           <br />
           <v-row align="center" justify="center">
@@ -51,16 +45,22 @@
               ></v-col>
             </template>
           </v-row>
+          <v-row class="mt-0" align="center" justify="center">
+            <v-btn color="primary" @click="hitung()">
+              <v-icon small>mdi-run-fast</v-icon>Hitung</v-btn
+            >
+          </v-row>
         </v-card>
 
         <v-card-text>
           <v-card
+            flat
             v-if="caraFPB.length > 0"
             outlined
             color="primary"
             class="mt-2 rounded-lg"
           >
-            <v-card>
+            <v-card flat>
               <v-toolbar dense flat>
                 <v-toolbar-title>Mencari KPK & FPB </v-toolbar-title>
               </v-toolbar>
@@ -156,12 +156,13 @@
           </v-card>
 
           <v-card
+            flat
             v-if="!loading"
             outlined
             color="primary"
             class="rounded-lg mt-2"
           >
-            <v-card>
+            <v-card flat>
               <v-toolbar dense flat>
                 <v-toolbar-title>Penyederhanaan bilangan </v-toolbar-title>
               </v-toolbar>
@@ -339,10 +340,10 @@ export default {
           babi = { pembagi: prima[ikan], angka: [] };
           var oke = null;
           for (let burung = 0; burung < angkasa.length; burung++) {
-            if (angkasa[burung].value % prima[ikan] == 0) {
+            if (angkasa[burung].value == 0) {
+            } else if (angkasa[burung].value % prima[ikan] == 0) {
               angkasa[burung].value = angkasa[burung].value / prima[ikan];
               babi.angka.push(angkasa[burung].value);
-              // babi["angka" + burung] = angkasa[burung].value;
 
               if (babi.fpb != false) {
                 babi["fpb"] = true;
@@ -350,7 +351,6 @@ export default {
               oke = true;
             } else {
               babi.angka.push(angkasa[burung].value);
-              // babi["angka" + burung] = angkasa[burung].value;
               babi["fpb"] = false;
             }
           }
