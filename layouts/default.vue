@@ -22,7 +22,7 @@
         <b>Buahati</b>
       </v-toolbar-title>
     </v-app-bar> -->
-    <v-main :style="{ background: $vuetify.theme.themes[theme].background }">
+    <v-main >
       <v-snackbar
         v-model="snackbar.enabled"
         :color="snackbar.color"
@@ -47,6 +47,36 @@ export default {
     saweria() {
       window.open("https://saweria.co/nandarusfikri", "_blank");
     }
+  },
+  mounted() {
+    // var array = ["(", ")", "(", ")"];
+
+    // var ayam = 0;
+    // var bebek = 0;
+    // for (let i = 0; i < array.length; i++) {
+    //   if (array[i] == "(") {
+    //     ayam++;
+    //   } else {
+    //     bebek++;
+    //   }
+    // }
+    // console.log(Math.max(ayam, bebek) - Math.min(ayam,bebek))
+
+
+    // for (let i = 1; i <= 100; i++) {
+    //  if (i % 3 == 0 && i % 5 == 0 ) {
+    //    console.log("Mampu")
+    //  }else if (i % 3 == 0) {
+    //    console.log("Mam")
+    //  }else if (i % 5 == 0) {
+    //    console.log("pu")
+    //  }else{
+    //    console.log(i)
+    //  }
+
+    // }
+
+    console.log("wasu ",1%3)
   },
   computed: {
     theme() {

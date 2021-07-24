@@ -1,174 +1,216 @@
 <template>
   <v-container>
     <v-card
-      flat
+      color="primary "
+      outlined
       class="mx-auto rounded-lg"
       :max-width="$vuetify.breakpoint.mobile ? 400 : 600"
     >
-      <v-card flat class="mx-auto rounded-lg">
-        <v-list-item three-line>
-          <v-list-item-content>
-            <v-list-item-title class="text-h5">
-              Halo Musyrikin!
-            </v-list-item-title>
-            <v-list-item-subtitle
-              >Kita bantu <b>Menyekutukan</b> bilangan Anda atau mencari
-              <b> KPK & FPB</b></v-list-item-subtitle
+      <v-card>
+        <v-card flat class="mx-auto rounded-lg">
+          <v-list-item three-line>
+            <v-list-item-content>
+              <v-list-item-title class="text-h5">
+                Halo Musyrikin!
+              </v-list-item-title>
+              <v-list-item-subtitle
+                >Kita bantu <b>Menyekutukan</b> bilangan Anda atau mencari
+                <b> KPK & FPB</b></v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-btn outlined small @click="add()">
+              <v-icon small>mdi-plus</v-icon>Angka</v-btn
             >
-          </v-list-item-content>
-        </v-list-item>
+            <v-btn
+              :disabled="angka.length <= 2"
+              outlined
+              color="error"
+              @click="hapus()"
+              small
+            >
+              <v-icon small>mdi-delete</v-icon>Angka</v-btn
+            >
+            <v-btn color="primary" @click="hitung()" small>
+              <v-icon small>mdi-run-fast</v-icon>Hitung</v-btn
+            ></v-card-actions
+          >
+
+          <br />
+          <v-row align="center" justify="center">
+            <template v-for="(item, index) in angka.length">
+              <v-col cols="3" md="2" sm="4" class="py-0" :key="index">
+                <v-text-field
+                  @keypress="isNumber($event)"
+                  v-model="angka[index].value"
+                  outlined
+                >
+                </v-text-field
+              ></v-col>
+            </template>
+          </v-row>
+        </v-card>
+
+        <v-card-text>
+          <v-card
+            v-if="caraFPB.length > 0"
+            outlined
+            color="primary"
+            class="mt-2 rounded-lg"
+          >
+            <v-card>
+              <v-toolbar dense flat>
+                <v-toolbar-title>Mencari KPK & FPB </v-toolbar-title>
+              </v-toolbar>
+              <v-card-text class="pt-0">
+                Dari bilangan
+                <span
+                  :style="{ color: $vuetify.theme.themes.light.primary }"
+                  v-for="(item, index) in angka.length"
+                  :key="index"
+                  ><b> {{ angka[index].value }} </b>
+                </span>
+                menghasilkan
+                <b
+                  >KPK =
+                  <span :style="{ color: $vuetify.theme.themes.light.error }"
+                    ><b>{{ KPK }}</b>
+                  </span>
+                  & FPB =
+                  <span :style="{ color: $vuetify.theme.themes.light.error }"
+                    ><b>{{ FPB }}</b>
+                  </span></b
+                >
+              </v-card-text>
+              <v-row align="center" justify="center">
+                <table class="py-2">
+                  <tr>
+                    <th class="px-1">
+                      Pembagi
+                    </th>
+
+                    <th v-for="header in angka" :key="header.value">
+                      {{ header.value }}
+                    </th>
+                  </tr>
+
+                  <tr
+                    class="text-center"
+                    v-for="(item, index) in caraFPB"
+                    :key="index"
+                  >
+                    <td>
+                      <v-chip outlined v-if="item.fpb" color="teal" dark>
+                        <b>{{ item.pembagi }}</b>
+                      </v-chip>
+
+                      <span v-else>{{ item.pembagi }}</span>
+                    </td>
+                    <td style="min-width:50px" v-for="(j, k) in angka" :key="k">
+                      {{ item.angka[k] }}
+                    </td>
+                  </tr>
+                </table>
+              </v-row>
+              <v-card-text>
+                <b>
+                  <div>
+                    KPK =
+                    <span v-for="(item, index) in angkaKPK.length" :key="index">
+                      {{ angkaKPK[index] }}
+                      <span
+                        style="color:black"
+                        v-if="angkaKPK.length - 1 != index"
+                        >x</span
+                      >
+                    </span>
+                    =
+                    <span :style="{ color: $vuetify.theme.themes.light.error }"
+                      ><b>{{ KPK }}</b>
+                    </span>
+                  </div>
+                  <div>
+                    FPB =
+                    <span
+                      :style="{ color: $vuetify.theme.themes.light.primary }"
+                      v-for="(item, index) in angkaFPB.length"
+                      :key="index"
+                    >
+                      {{ angkaFPB[index] }}
+                      <span
+                        style="color:black"
+                        v-if="angkaFPB.length - 1 != index"
+                        >x</span
+                      >
+                    </span>
+                    =
+                    <span :style="{ color: $vuetify.theme.themes.light.error }"
+                      ><b>{{ FPB }}</b>
+                    </span>
+                  </div>
+                </b>
+              </v-card-text>
+            </v-card>
+          </v-card>
+
+          <v-card
+            v-if="!loading"
+            outlined
+            color="primary"
+            class="rounded-lg mt-2"
+          >
+            <v-card>
+              <v-toolbar dense flat>
+                <v-toolbar-title>Penyederhanaan bilangan </v-toolbar-title>
+              </v-toolbar>
+              <v-card-text class="pt-0">
+                bilangan
+                <span
+                  :style="{ color: $vuetify.theme.themes.light.primary }"
+                  v-for="(item, index) in angka.length"
+                  :key="index"
+                  ><b> {{ angka[index].value }} </b>
+                </span>
+                bisa di sederhanakan dengan dibagi
+                <span :style="{ color: $vuetify.theme.themes.light.error }"
+                  ><b>{{ hasil[0] }}</b>
+                </span>
+                <b>Hasilnya :</b>
+
+                <span
+                  v-for="(item, index) in angka.length"
+                  :key="angka[index].value"
+                >
+                  <div style="font-weight: bold;">
+                    <span
+                      :style="{ color: $vuetify.theme.themes.light.primary }"
+                      >{{ angka[index].value }}</span
+                    >/<span
+                      :style="{ color: $vuetify.theme.themes.light.error }"
+                      >{{ hasil[0] }}</span
+                    >
+                    =
+                    <span
+                      :style="{ color: $vuetify.theme.themes.light.secondary }"
+                      >{{ angka[index].value / hasil[0] }}</span
+                    >
+                  </div>
+                </span>
+              </v-card-text>
+            </v-card>
+          </v-card>
+        </v-card-text>
+
+        <v-divider></v-divider>
 
         <v-card-actions>
-          <v-btn outlined small @click="add()">
-            <v-icon small>mdi-plus</v-icon>Tambah</v-btn
-          >
-          <v-btn
-            :disabled="angka.length <= 2"
-            outlined
-            color="error"
-            @click="hapus()"
-            small
-          >
-            <v-icon small>mdi-delete</v-icon>Hapus</v-btn
-          >
-          <v-btn color="primary" @click="hitung()" small>
-            <v-icon small>mdi-run-fast</v-icon>Hitung</v-btn
-          ></v-card-actions
-        >
-
-        <br />
-        <v-row align="center" justify="center">
-          <template v-for="(item, index) in angka.length">
-            <v-col cols="3" md="2" sm="4" class="py-0" :key="index">
-              <v-text-field
-                @keypress="isNumber($event)"
-                v-model="angka[index].value"
-                outlined
-              >
-              </v-text-field
-            ></v-col>
-          </template>
-        </v-row>
+          <v-btn text @click="dialog = true">
+            Lihat Rumus
+          </v-btn>
+        </v-card-actions>
       </v-card>
-
-      <v-card-text>
-        <v-card v-if="!loading" outlined color="primary" class="rounded-lg">
-          <v-card>
-            <v-toolbar dense flat>
-              <v-toolbar-title>Penyederhanaan bilangan </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text class="pt-0">
-              bilangan
-              <span
-                :style="{ color: $vuetify.theme.themes.light.primary }"
-                v-for="(item, index) in angka.length"
-                :key="index"
-                ><b> {{ angka[index].value }} </b>
-              </span>
-              bisa di sederhanakan dengan dibagi
-              <span :style="{ color: $vuetify.theme.themes.light.error }"
-                ><b>{{ hasil[0] }}</b>
-              </span>
-              <b>Hasilnya :</b>
-
-              <span
-                v-for="(item, index) in angka.length"
-                :key="angka[index].value"
-              >
-                <div style="font-weight: bold;">
-                  <span
-                    :style="{ color: $vuetify.theme.themes.light.primary }"
-                    >{{ angka[index].value }}</span
-                  >/<span
-                    :style="{ color: $vuetify.theme.themes.light.error }"
-                    >{{ hasil[0] }}</span
-                  >
-                  =
-                  <span
-                    :style="{ color: $vuetify.theme.themes.light.secondary }"
-                    >{{ angka[index].value / hasil[0] }}</span
-                  >
-                </div>
-              </span>
-            </v-card-text>
-          </v-card>
-        </v-card>
-        <v-card
-          v-if="!loading"
-          outlined
-          color="primary"
-          class="mt-2 rounded-lg"
-        >
-          <v-card>
-            <v-toolbar dense flat>
-              <v-toolbar-title>Mencari FPB </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text class="pt-0">
-              Faktor Persekutuan Terbesar dari bilangan
-              <span
-                :style="{ color: $vuetify.theme.themes.light.primary }"
-                v-for="(item, index) in angka.length"
-                :key="index"
-                ><b> {{ angka[index].value }} </b>
-              </span>
-              <b>adalah </b>
-              <span :style="{ color: $vuetify.theme.themes.light.error }"
-                ><b>{{ hasil[0] }}</b>
-              </span>
-            </v-card-text>
-            <v-row>
-              <v-col v-for="item in FPB" :key="item" cols="12" md="4" sm="6">
-                <v-timeline>
-                  <v-timeline-item
-                    left
-                    v-for="n in item"
-                    :key="n"
-                    fill-dot
-                    color="red lighten-2"
-                  >
-                    <template v-slot:icon>
-                      <v-avatar>
-                        <span class="white--text text-h5">{{ n.hasil }}</span>
-                      </v-avatar>
-                    </template>
-
-                    <v-card v-if="n.pembagi" color="primary" max-width="50">
-                      <v-avatar color="primary" size="36">
-                        <span class="white--text text-h5">{{ n.pembagi }}</span>
-                      </v-avatar>
-                    </v-card>
-                  </v-timeline-item>
-                </v-timeline>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-card>
-
-        <v-card
-          v-if="!loading"
-          outlined
-          color="primary"
-          class="mt-2 rounded-lg"
-        >
-          <v-card>
-            <v-toolbar dense flat>
-              <v-toolbar-title>Mencari KPK </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text class="pt-0">
-              Maaf Saat Ini <b>KPK</b>nya sedang di Nerf. jika sudah normal akan
-              di publish
-            </v-card-text>
-          </v-card>
-        </v-card>
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <v-card-actions>
-        <v-btn text @click="dialog = true">
-          Lihat Rumus
-        </v-btn>
-      </v-card-actions>
     </v-card>
 
     <v-dialog max-width="400px" v-model="dialog">
@@ -204,7 +246,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
@@ -217,7 +258,11 @@ export default {
       angka: [{ value: 36 }, { value: 54 }],
       time: 0,
       loading: true,
-      FPB: []
+      FPB: null,
+      KPK: null,
+      angkaFPB: [],
+      angkaKPK: [],
+      caraFPB: []
     };
   },
 
@@ -244,11 +289,89 @@ export default {
     hapus() {
       this.angka.splice(this.angka.length - 1, 1);
     },
-    hitung() {
+    async hitung() {
       this.loading = true;
-      const angka = this.angka;
-      this.penyederhanaan(angka);
+      this.$cookies.set("angka", this.angka);
+      const prima = await this.Prima(this.angka);
+
+      this.HitungFPB(prima);
+      this.penyederhanaan(this.angka);
       this.loading = false;
+    },
+    async Prima(params) {
+      const max = params.reduce(
+        (max, p) => (p.value > max ? p.value : max),
+        params[0].value
+      );
+      var prima = [];
+
+      for (let x = 1; x <= max; x++) {
+        var pembagi = 0;
+        for (let z = 1; z <= x; z++) {
+          if (x % z == 0) {
+            pembagi++;
+          }
+        }
+        if (pembagi == 2) {
+          prima.push(x);
+        }
+      }
+
+      return prima;
+    },
+    HitungFPB(prima) {
+      this.FPB = null;
+      this.KPK = null;
+      this.angkaKPK = [];
+      this.angkaFPB = [];
+      var temp = this.$cookies.get("angka");
+      var max = temp.reduce(
+        (max, p) => (p.value > max ? p.value : max),
+        temp[0].value
+      );
+
+      this.caraFPB = [];
+
+      for (let index = 0; index < max; index++) {
+        for (let ikan = 0; ikan < prima.length; ikan++) {
+          let angkasa = temp;
+          var babi = null;
+          babi = { pembagi: prima[ikan], angka: [] };
+          var oke = null;
+          for (let burung = 0; burung < angkasa.length; burung++) {
+            if (angkasa[burung].value % prima[ikan] == 0) {
+              angkasa[burung].value = angkasa[burung].value / prima[ikan];
+              babi.angka.push(angkasa[burung].value);
+              // babi["angka" + burung] = angkasa[burung].value;
+
+              if (babi.fpb != false) {
+                babi["fpb"] = true;
+              }
+              oke = true;
+            } else {
+              babi.angka.push(angkasa[burung].value);
+              // babi["angka" + burung] = angkasa[burung].value;
+              babi["fpb"] = false;
+            }
+          }
+
+          if (oke) {
+            this.caraFPB.push(babi);
+            break;
+          }
+        }
+      }
+
+      this.FPB = 1;
+      this.KPK = 1;
+      for (let i = 0; i < this.caraFPB.length; i++) {
+        if (this.caraFPB[i].fpb) {
+          this.FPB = this.FPB * this.caraFPB[i].pembagi;
+          this.angkaFPB.push(this.caraFPB[i].pembagi);
+        }
+        this.KPK = this.KPK * this.caraFPB[i].pembagi;
+        this.angkaKPK.push(this.caraFPB[i].pembagi);
+      }
     },
     penyederhanaan(params) {
       var temp = params;
@@ -277,53 +400,17 @@ export default {
       });
       console.log("pembagi ", pembagi);
       this.hasil = pembagi;
-
-      var prima = [];
-
-      for (let x = 1; x <= max; x++) {
-        var pembagi = 0;
-        for (let z = 1; z <= x; z++) {
-          if (x % z == 0) {
-            pembagi++;
-          }
-        }
-        if (pembagi == 2) {
-          prima.push(x);
-        }
-      }
-
-      var result = [];
-
-      for (let s = 0; s < temp.length; s++) {
-        var bilangan,
-          sapi = [],
-          ayam;
-        bilangan = temp[s].value;
-        ayam = { pembagi: null, hasil: bilangan };
-        sapi.push(ayam);
-        for (let index = 0; index < max; index++) {
-          for (let h = 0; h < prima.length; h++) {
-            if (bilangan % prima[h] == 0) {
-              bilangan = bilangan / prima[h];
-
-              ayam = { pembagi: prima[h], hasil: bilangan };
-              sapi.push(ayam);
-              break;
-            }
-          }
-        }
-
-        result.push(sapi);
-      }
-
-      this.FPB = result;
     }
   },
   computed: {}
 };
 </script>
 <style scoped>
-
+table,
+th,
+td {
+  border: 1px solid black;
+}
 #latar {
   background: rgb(0, 199, 166);
   background: radial-gradient(
