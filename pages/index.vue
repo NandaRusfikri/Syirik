@@ -13,11 +13,11 @@
           <v-card-subtitle
             >Kita bantu mencari <b> KPK & FPB</b> atau
             <b>Menyekutukan </b>bilangan & Menyederhanakan masalah
-            Anda.</v-card-subtitle
+            Kamu.</v-card-subtitle
           >
 
           <v-card-actions>
-            <v-btn outlined small @click="add()"  :disabled="angka.length >= 4">
+            <v-btn outlined small @click="add()" :disabled="angka.length >= 4">
               <v-icon small>mdi-plus</v-icon>Angka</v-btn
             >
             <v-spacer />
@@ -160,7 +160,7 @@
             v-if="!loading"
             outlined
             color="primary"
-            class="rounded-lg mt-2"
+            class="rounded-lg mt-4"
           >
             <v-card flat>
               <v-toolbar dense flat>
@@ -208,7 +208,7 @@
 
         <v-card-actions>
           <v-btn text @click="dialog = true">
-            Lihat Rumus
+            Lihat Materi Lain
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -217,7 +217,7 @@
     <v-dialog max-width="400px" v-model="dialog">
       <v-card class="rounded-lg">
         <v-toolbar flat dense>
-          <v-toolbar-title dark><b>Lihat Rumus </b></v-toolbar-title>
+          <v-toolbar-title dark><b>Lihat Materi Lain </b></v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click="dialog = false">
             <v-icon>mdi-close</v-icon>
@@ -225,24 +225,31 @@
         </v-toolbar>
 
         <v-card-text>
+          <v-alert border="top" colored-border type="info" elevation="1">
+            Terimakasih sudah mampir, tetapi materi lain masih proses pengerjaan.
+          </v-alert>
           <p>
-            Beliin Saya <b>Kopi</b> atau <b>sawer</b> di saweria Nanti Saya
-            Kasih tau rumus cepetnya.
+            Kamu ada saran atau pertanyaan ? kirim saran atau pertanyaan kamu
+            <a href="https://forms.gle/M4JjCK3JjvCDMKeBA" target="_blank"
+              >kesini.</a
+            >
           </p>
-          <a href="https://saweria.co/nandarusfikri" target="_blank"
-            ><img
-              src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"
-              alt="Buy Me A Coffee"
-              style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"
-          /></a>
+          <p>
+            Jika kamu suka, kamu bisa mensupport dengan berdonasi di
+            <b>
+              <a href="https://saweria.co/nandarusfikri" target="_blank"
+                >Saweria.</a
+              ></b
+            >
+          </p>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn dense small outlined @click="saweria()" color="primary">
-            Beliin
+          <v-btn dense small outlined @click="saran()" color="primary">
+            Kirim Saran
           </v-btn>
-          <v-btn dense small @click="saweria()" color="#faae2b">
-            Sawer
+          <v-btn dense small outlined @click="saweria()" color="#faae2b">
+            atau Donasi
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -270,6 +277,9 @@ export default {
   methods: {
     saweria() {
       window.open("https://saweria.co/nandarusfikri", "_blank");
+    },
+    saran() {
+      window.open("https://forms.gle/M4JjCK3JjvCDMKeBA", "_blank");
     },
     isNumber: function(evt) {
       evt = evt ? evt : window.event;
