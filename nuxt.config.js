@@ -60,6 +60,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
+
     theme: {
       dark: false,
       themes: {
@@ -73,14 +74,15 @@ export default {
           success: colors.green.accent3
         },
         light: {
-          border: "#E3E3E3",
-          textprimary: "#53CC9D",
-          border_order:"#E3E3E3",
-          btnprimary: "#53CC9D",
+          border: "#f2f7f5",
+          textprimary: "#faae2b",
+          border_order:"#f2f7f5",
+          btnprimary: "#faae2b",
           background: "#74E39A20",
-          primary: "#53CC9D",
-          accent: "#E3E3E3",
-          secondary: "#1A237E",
+          primary: "#faae2b",
+          accent: "#f2f7f5",
+          secondary: "#8bd3dd",
+          secondary2: "#ffbdc4",
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,

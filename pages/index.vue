@@ -328,6 +328,7 @@ export default {
         }
       }
 
+console.log(prima)
       return prima;
     },
     HitungFPB(prima) {

@@ -1,27 +1,25 @@
 <template>
   <v-app app>
     <v-app-bar app color="white" flat>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title style="font-family: Comfortaa;font-weight: 800">
-        <b>Syirik</b>
+        <span :style="{ color: $vuetify.theme.themes.light.primary }"
+          ><b>Syirik</b></span
+        >
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn class="text-capitalize" @click="dialog = true" outlined>
+      <v-btn
+        class="text-capitalize border_custom"
+        color="secondary"
+
+        @click="dialog = true"
+      >
         Apaini?
       </v-btn>
     </v-app-bar>
-    <!-- <v-app-bar
-      dense
-      flat
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      app
-      :style="{ background: $vuetify.theme.themes[theme].background }"
-    >
-      <v-toolbar-title style="font-family: Comfortaa;font-weight: 800" class="ml-0 pl-4">
-        <b>Buahati</b>
-      </v-toolbar-title>
-    </v-app-bar> -->
+
     <v-main>
       <v-snackbar
         v-model="snackbar.enabled"
@@ -38,6 +36,26 @@
       </v-snackbar>
       <nuxt />
     </v-main>
+    <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+      <v-list>
+        <v-subheader><b>Materi Syirik</b></v-subheader>
+
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+          <v-list-item-avatar>
+            <v-avatar color="secondary2" size="40"
+              ><span v-if="!item.icon" class="white--text ">{{
+                item.text.substring(0, 3)
+              }}</span>
+              <v-icon v-else dark v-text="item.icon"></v-icon>
+            </v-avatar>
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title v-text="item.text"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-dialog max-width="400px" v-model="dialog">
       <v-card class="rounded-lg">
         <v-toolbar flat dense>
@@ -97,7 +115,18 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      dialog: false
+      drawer: false,
+      group: null,
+      dialog: false,
+      items: [
+        { text: "KPK & FPB", to: "/" },
+        {
+          text: "Bangun Datar",
+          icon: "mdi-triangle-outline",
+          to: "/bangundatar"
+        },
+        { text: "Matrik", icon: "mdi-matrix" }
+      ]
     };
   },
   methods: {
@@ -147,4 +176,4 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+
